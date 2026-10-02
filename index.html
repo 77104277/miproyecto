@@ -1,0 +1,239 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SAX | Tienda de Saxofones</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+:root{--gold:#d4af37;--black:#080808;--panel:#141414}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{margin:0;background:var(--black);color:#f5f5f5;font-family:Montserrat,sans-serif}
+.navbar,footer{background:#050505;border-bottom:1px solid #333}
+.navbar-brand{color:var(--gold)!important;font:700 2rem Oswald,sans-serif;letter-spacing:3px}
+.nav-link{color:#eee!important;font-size:.85rem;font-weight:700}
+.nav-link:hover{color:var(--gold)!important}
+.gold{color:var(--gold)}
+.btn-gold{background:linear-gradient(135deg,#f5d477,#c59523);color:#111;border:0;font-weight:800}
+.btn-gold:hover{background:#ffe29a;color:#000}
+.btn-outline-gold{border:1px solid var(--gold);color:var(--gold);font-weight:700}
+.btn-outline-gold:hover{background:var(--gold);color:#000}
+.hero{min-height:470px;display:flex;align-items:center;background:linear-gradient(90deg,#000 5%,rgba(0,0,0,.8) 45%,rgba(0,0,0,.3)),url("https://commons.wikimedia.org/wiki/Special:FilePath/Saxophone%20alto.jpg") center/cover no-repeat}
+.hero-content{padding-top:95px;padding-bottom:65px}
+.hero h1{font:700 clamp(2.8rem,6vw,5rem) Oswald,sans-serif;line-height:1.08}
+.hero p{color:#ddd;max-width:480px;line-height:1.8}
+.eyebrow{color:var(--gold);letter-spacing:2px;font-size:.8rem;font-weight:800;text-transform:uppercase}
+.section-title{text-align:center;font:700 2rem Oswald,sans-serif;text-transform:uppercase}
+.section-subtitle{text-align:center;color:#bbb;margin-bottom:32px}
+.products-section,.about-section,.contact-section{padding:55px 0}
+.product-card{height:100%;background:#101010;border:1px solid #383838;border-radius:9px;overflow:hidden;transition:.25s}
+.product-card:hover{transform:translateY(-4px);border-color:var(--gold)}
+.product-img-wrap{height:235px;background:radial-gradient(ellipse,#332b19,#090909 75%);padding:15px;display:flex;align-items:center;justify-content:center}
+.product-img{width:100%;height:100%;object-fit:contain}
+.product-info{padding:17px}
+.product-info h3{font-size:1.05rem;font-weight:800}
+.product-info p{font-size:.82rem;color:#bbb;line-height:1.6;min-height:60px}
+.price{font-size:1.2rem;font-weight:800;color:var(--gold)}
+.product-tag{background:var(--gold);color:#111;font-size:.65rem;padding:5px 8px;font-weight:800}
+.product-actions{display:flex;gap:7px;margin-top:12px}
+.product-actions .btn{flex:1;font-size:.78rem}
+.feature-box{width:100%;height:100%;padding:20px 10px;background:var(--panel);border:1px solid #383838;border-radius:8px;color:white;cursor:pointer}
+.feature-box:hover{border-color:var(--gold)}
+.feature-box i{font-size:2rem;color:var(--gold)}
+.feature-box h3{font-size:1rem;font-weight:800;margin-top:10px}
+.feature-box p{font-size:.78rem;color:#bbb;margin:0}
+.carousel-item{height:310px;background:#111}
+.carousel-image{height:310px;width:100%;object-fit:cover;filter:brightness(.38)}
+.carousel-caption{bottom:50%;transform:translateY(50%)}
+.carousel-caption h2{font:700 clamp(2rem,5vw,3rem) Oswald,sans-serif}
+.about-section{background:#101010;border-block:1px solid #333}
+.about-text{color:#ccc;line-height:1.8;font-size:.9rem}
+.about-image{width:100%;height:270px;object-fit:contain;background:#080808;border:1px solid #444;border-radius:8px}
+.accordion-item{background:#151515;border:1px solid #383838;margin-bottom:8px}
+.accordion-button{background:#151515;color:white;font-weight:600;font-size:.85rem}
+.accordion-button:not(.collapsed){background:#201d13;color:var(--gold);box-shadow:none}
+.accordion-button::after{filter:invert(1)}
+.accordion-body{color:#ccc;font-size:.85rem;line-height:1.7}
+.contact-section{background:linear-gradient(#000e,#000e),url("https://commons.wikimedia.org/wiki/Special:FilePath/Saxophone%20alto.jpg") center/cover}
+.contact-info p{color:#ccc;font-size:.9rem}
+.contact-info i{color:var(--gold);margin-right:10px}
+.contact-form{background:#111;border:1px solid #444;border-radius:8px;padding:24px}
+.form-control{background:#1b1b1b;color:white;border-color:#444}
+.form-control:focus{background:#1b1b1b;color:white;border-color:var(--gold);box-shadow:none}
+.form-control::placeholder{color:#888}
+.form-label{font-size:.82rem}
+footer{padding:35px 0 15px}
+.footer-title{color:var(--gold);font-size:.95rem;font-weight:800}
+.footer-link{display:block;color:#bbb;text-decoration:none;font-size:.83rem;margin:8px 0}
+.footer-link:hover{color:var(--gold)}
+.social-link{display:inline-flex;justify-content:center;align-items:center;width:36px;height:36px;background:var(--gold);color:#111;border-radius:50%;margin:4px;text-decoration:none}
+.copyright{text-align:center;color:#888;border-top:1px solid #333;padding-top:16px;margin-top:25px;font-size:.75rem}
+.modal-content{background:#151515;color:white;border:1px solid #514521}
+.modal-header,.modal-footer{border-color:#383838}
+.btn-close{filter:invert(1)}
+.modal-product-img{width:100%;height:230px;object-fit:contain;background:#090909;border-radius:8px}
+@media(max-width:767px){.hero{min-height:410px}.hero-content{padding-top:100px}.product-info p{min-height:auto}.carousel-item,.carousel-image{height:270px}.about-image{margin-top:15px}}
+</style>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+<div class="container">
+<a class="navbar-brand" href="#inicio"><i class="bi bi-music-note-beamed"></i> SAX</a>
+<button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#menu" aria-label="Abrir menú"><span class="navbar-toggler-icon"></span></button>
+<div class="collapse navbar-collapse" id="menu">
+<ul class="navbar-nav ms-auto">
+<li class="nav-item"><a class="nav-link" href="#inicio">Inicio</a></li>
+<li class="nav-item"><a class="nav-link" href="#saxofones">Saxofones</a></li>
+<li class="nav-item"><a class="nav-link" href="#nosotros">Nosotros</a></li>
+<li class="nav-item"><a class="nav-link" href="#faq">FAQ</a></li>
+<li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
+</ul>
+</div>
+</div>
+</nav>
+
+<header class="hero" id="inicio">
+<div class="container hero-content">
+<div class="eyebrow">Tu música, nuestro compromiso</div>
+<h1>SAXOFONES<br><span class="gold">DE ALTA CALIDAD</span></h1>
+<p>Encuentra el instrumento perfecto para comenzar, mejorar o llevar tu música al siguiente nivel.</p>
+<a href="#saxofones" class="btn btn-gold rounded-pill px-4 py-2">Ver saxofones <i class="bi bi-arrow-right"></i></a>
+</div>
+</header>
+
+<section class="products-section" id="saxofones">
+<div class="container">
+<h2 class="section-title">Nuestros <span class="gold">saxofones</span></h2>
+<p class="section-subtitle">Instrumentos para cada estilo y nivel.</p>
+<div class="row g-4">
+
+<div class="col-12 col-sm-6 col-lg-3">
+<div class="product-card">
+<div class="product-img-wrap"><img class="product-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Saxophone%20alto.jpg" alt="Saxofón alto" onerror="this.onerror=null;this.src='https://commons.wikimedia.org/wiki/Special:FilePath/Yamaha_YAS-25_Alto_Saxophone.jpg'"></div>
+<div class="product-info"><span class="product-tag">MÁS VENDIDO</span><h3 class="mt-2">Saxofón Alto</h3><p>Versátil y cómodo, ideal para estudiantes y músicos de diferentes niveles.</p><div class="price">S/ 2,499</div>
+<div class="product-actions"><button class="btn btn-outline-gold" data-bs-toggle="modal" data-bs-target="#alto">Ver más</button><button class="btn btn-gold" onclick="comprar('Saxofón Alto')"><i class="bi bi-cart-fill"></i> Comprar</button></div></div>
+</div></div>
+
+<div class="col-12 col-sm-6 col-lg-3">
+<div class="product-card">
+<div class="product-img-wrap"><img class="product-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Tenor_Sax.jpg" alt="Saxofón tenor" onerror="this.onerror=null;this.src='https://commons.wikimedia.org/wiki/Special:FilePath/Saxophone%20alto.jpg'"></div>
+<div class="product-info"><span class="product-tag">PROFESIONAL</span><h3 class="mt-2">Saxofón Tenor</h3><p>Sonido profundo y potente, utilizado en jazz, rock, pop y música popular.</p><div class="price">S/ 3,299</div>
+<div class="product-actions"><button class="btn btn-outline-gold" data-bs-toggle="modal" data-bs-target="#tenor">Ver más</button><button class="btn btn-gold" onclick="comprar('Saxofón Tenor')"><i class="bi bi-cart-fill"></i> Comprar</button></div></div>
+</div></div>
+
+<div class="col-12 col-sm-6 col-lg-3">
+<div class="product-card">
+<div class="product-img-wrap"><img class="product-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Baritone_Sax.jpg" alt="Saxofón barítono" onerror="this.onerror=null;this.src='https://commons.wikimedia.org/wiki/Special:FilePath/Saxophone%20alto.jpg'"></div>
+<div class="product-info"><h3>Saxofón Barítono</h3><p>Sonido grave y potente, ideal para bandas, orquestas y ensambles de jazz.</p><div class="price">S/ 5,499</div>
+<div class="product-actions"><button class="btn btn-outline-gold" data-bs-toggle="modal" data-bs-target="#baritono">Ver más</button><button class="btn btn-gold" onclick="comprar('Saxofón Barítono')"><i class="bi bi-cart-fill"></i> Comprar</button></div></div>
+</div></div>
+
+<div class="col-12 col-sm-6 col-lg-3">
+<div class="product-card">
+<div class="product-img-wrap"><img class="product-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Soprano_Saxophone.jpg" alt="Saxofón soprano" onerror="this.onerror=null;this.src='https://commons.wikimedia.org/wiki/Special:FilePath/Saxophone%20alto.jpg'"></div>
+<div class="product-info"><h3>Saxofón Soprano</h3><p>Compacto y brillante, ideal para melodías expresivas y estilos variados.</p><div class="price">S/ 2,999</div>
+<div class="product-actions"><button class="btn btn-outline-gold" data-bs-toggle="modal" data-bs-target="#soprano">Ver más</button><button class="btn btn-gold" onclick="comprar('Saxofón Soprano')"><i class="bi bi-cart-fill"></i> Comprar</button></div></div>
+</div></div>
+
+</div>
+
+<div class="row g-3 mt-4">
+<div class="col-6 col-lg-3"><button class="feature-box" data-bs-toggle="modal" data-bs-target="#calidad"><i class="bi bi-award"></i><h3>Calidad</h3><p>Instrumentos seleccionados.</p></button></div>
+<div class="col-6 col-lg-3"><button class="feature-box" data-bs-toggle="modal" data-bs-target="#envios"><i class="bi bi-truck"></i><h3>Envíos</h3><p>Consulta las entregas.</p></button></div>
+<div class="col-6 col-lg-3"><button class="feature-box" data-bs-toggle="modal" data-bs-target="#asesoria"><i class="bi bi-headset"></i><h3>Asesoría</h3><p>Te ayudamos a elegir.</p></button></div>
+<div class="col-6 col-lg-3"><button class="feature-box" data-bs-toggle="modal" data-bs-target="#garantia"><i class="bi bi-shield-check"></i><h3>Garantía</h3><p>Compra con confianza.</p></button></div>
+</div>
+</div>
+</section>
+
+<section class="carousel-section">
+<div id="carrusel" class="carousel slide" data-bs-ride="carousel">
+<div class="carousel-indicators">
+<button data-bs-target="#carrusel" data-bs-slide-to="0" class="active" aria-label="Diapositiva 1"></button>
+<button data-bs-target="#carrusel" data-bs-slide-to="1" aria-label="Diapositiva 2"></button>
+<button data-bs-target="#carrusel" data-bs-slide-to="2" aria-label="Diapositiva 3"></button>
+</div>
+<div class="carousel-inner">
+<div class="carousel-item active"><img class="carousel-image" src="https://commons.wikimedia.org/wiki/Special:FilePath/Saxophone%20alto.jpg" alt="Saxofón dorado"><div class="carousel-caption"><div class="eyebrow">Pasión por la música</div><h2>ENCUENTRA TU SONIDO</h2><p>El instrumento perfecto para ti.</p><a href="#saxofones" class="btn btn-gold">Ver catálogo</a></div></div>
+<div class="carousel-item"><img class="carousel-image" src="https://commons.wikimedia.org/wiki/Special:FilePath/Tenor_Sax.jpg" alt="Saxofón tenor" onerror="this.onerror=null;this.src='https://commons.wikimedia.org/wiki/Special:FilePath/Saxophone%20alto.jpg'"><div class="carousel-caption"><div class="eyebrow">Tu estilo, tu música</div><h2>SONIDO CON PERSONALIDAD</h2><p>Descubre tu próximo instrumento.</p><a href="#saxofones" class="btn btn-gold">Explorar</a></div></div>
+<div class="carousel-item"><img class="carousel-image" src="https://commons.wikimedia.org/wiki/Special:FilePath/Soprano_Saxophone.jpg" alt="Saxofón soprano" onerror="this.onerror=null;this.src='https://commons.wikimedia.org/wiki/Special:FilePath/Saxophone%20alto.jpg'"><div class="carousel-caption"><div class="eyebrow">Empieza hoy</div><h2>LA MÚSICA TE ESPERA</h2><p>Desarrolla tu talento con SAX.</p><a href="#contacto" class="btn btn-gold">Contáctanos</a></div></div>
+</div>
+<button class="carousel-control-prev" data-bs-target="#carrusel" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span><span class="visually-hidden">Anterior</span></button>
+<button class="carousel-control-next" data-bs-target="#carrusel" data-bs-slide="next"><span class="carousel-control-next-icon"></span><span class="visually-hidden">Siguiente</span></button>
+</div>
+</section>
+
+<section class="about-section" id="nosotros">
+<div class="container"><div class="row g-4 align-items-center">
+<div class="col-lg-4"><h2 class="gold fw-bold">SOBRE NOSOTROS</h2><p class="about-text">En SAX nos apasiona la música y queremos ofrecer instrumentos que ayuden a cada músico a desarrollar su talento. Tenemos saxofones altos, tenores, barítonos y sopranos para diferentes niveles y estilos.</p><p class="gold fw-bold">Nuestro objetivo es ayudarte a encontrar un instrumento que se adapte a tu sonido.</p></div>
+<div class="col-lg-3"><img class="about-image" src="https://commons.wikimedia.org/wiki/Special:FilePath/Saxophone%20alto.jpg" alt="Saxofón de SAX"></div>
+<div class="col-lg-5" id="faq"><h2 class="gold fw-bold mb-3">PREGUNTAS FRECUENTES</h2>
+<div class="accordion" id="preguntas">
+<div class="accordion-item"><h3 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#p1">¿Qué saxofón debería comprar?</button></h3><div id="p1" class="accordion-collapse collapse" data-bs-parent="#preguntas"><div class="accordion-body">El saxofón alto suele ser una opción práctica para comenzar. Depende de tus objetivos y presupuesto.</div></div></div>
+<div class="accordion-item"><h3 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#p2">¿Cuál es la diferencia entre alto y tenor?</button></h3><div id="p2" class="accordion-collapse collapse" data-bs-parent="#preguntas"><div class="accordion-body">El alto es más pequeño y agudo; el tenor es más grande y tiene un sonido más grave.</div></div></div>
+<div class="accordion-item"><h3 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#p3">¿Realizan envíos?</button></h3><div id="p3" class="accordion-collapse collapse" data-bs-parent="#preguntas"><div class="accordion-body">Consulta la disponibilidad, el costo y el tiempo de entrega según tu ciudad.</div></div></div>
+<div class="accordion-item"><h3 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#p4">¿Los saxofones tienen garantía?</button></h3><div id="p4" class="accordion-collapse collapse" data-bs-parent="#preguntas"><div class="accordion-body">Consulta las condiciones y el plazo de garantía del modelo elegido.</div></div></div>
+</div></div>
+</div></div>
+</section>
+
+<section class="contact-section" id="contacto">
+<div class="container"><div class="row g-4 align-items-center">
+<div class="col-lg-4 contact-info"><h2 class="gold fw-bold">CONTACTO</h2><p>¿Tienes alguna pregunta? Escríbenos.</p><p><i class="bi bi-geo-alt-fill"></i>Lima, Perú</p><p><i class="bi bi-envelope-fill"></i>contacto@sax.pe</p><p><i class="bi bi-telephone-fill"></i>+51 999 999 999</p><p><i class="bi bi-clock-fill"></i>Lunes a sábado: 9:00 - 18:00</p></div>
+<div class="col-lg-8"><form class="contact-form" id="formulario"><div class="row g-3">
+<div class="col-md-6"><label class="form-label" for="nombre">Nombre</label><input id="nombre" class="form-control" placeholder="Tu nombre" required></div>
+<div class="col-md-6"><label class="form-label" for="correo">Correo electrónico</label><input id="correo" type="email" class="form-control" placeholder="tu@correo.com" required></div>
+<div class="col-12"><label class="form-label" for="mensaje">Mensaje</label><textarea id="mensaje" class="form-control" rows="4" placeholder="Escribe tu mensaje..." required></textarea></div>
+<div class="col-12"><button class="btn btn-gold w-100" type="submit"><i class="bi bi-send-fill me-2"></i>Enviar mensaje</button><p id="aviso" class="gold mt-3 mb-0" role="status"></p></div>
+</div></form></div>
+</div></div>
+</section>
+
+<footer><div class="container"><div class="row g-4">
+<div class="col-md-4"><a class="navbar-brand" href="#inicio"><i class="bi bi-music-note-beamed"></i>SAX</a><p class="text-secondary small">Tienda de saxofones</p></div>
+<div class="col-md-4"><h3 class="footer-title">ENLACES</h3><a class="footer-link" href="#inicio">Inicio</a><a class="footer-link" href="#saxofones">Saxofones</a><a class="footer-link" href="#nosotros">Nosotros</a><a class="footer-link" href="#faq">FAQ</a><a class="footer-link" href="#contacto">Contacto</a></div>
+<div class="col-md-4"><h3 class="footer-title">SÍGUENOS</h3><p class="text-secondary small">Encuéntranos en redes sociales.</p><a class="social-link" href="https://www.instagram.com/" aria-label="Instagram"><i class="bi bi-instagram"></i></a><a class="social-link" href="https://www.facebook.com/" aria-label="Facebook"><i class="bi bi-facebook"></i></a><a class="social-link" href="https://www.tiktok.com/" aria-label="TikTok"><i class="bi bi-tiktok"></i></a><a class="social-link" href="https://www.youtube.com/" aria-label="YouTube"><i class="bi bi-youtube"></i></a></div>
+</div><div class="copyright">© 2026 SAX | Tienda de Saxofones. Todos los derechos reservados.</div></div></footer>
+
+<!-- MODALES DE PRODUCTOS -->
+<div class="modal fade" id="alto" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h2 class="modal-title fs-5 gold">Saxofón Alto</h2><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><img class="modal-product-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Saxophone%20alto.jpg" alt="Saxofón alto"><p class="mt-3">Versátil y cómodo, muy usado por estudiantes y músicos de diversos estilos.</p><div class="price">S/ 2,499</div></div><div class="modal-footer"><button class="btn btn-gold" onclick="comprar('Saxofón Alto')">Consultar compra</button></div></div></div></div>
+<div class="modal fade" id="tenor" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h2 class="modal-title fs-5 gold">Saxofón Tenor</h2><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><img class="modal-product-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Tenor_Sax.jpg" alt="Saxofón tenor" onerror="this.onerror=null;this.src='https://commons.wikimedia.org/wiki/Special:FilePath/Saxophone%20alto.jpg'"><p class="mt-3">Sonido cálido y profundo, habitual en jazz, rock, pop y bandas.</p><div class="price">S/ 3,299</div></div><div class="modal-footer"><button class="btn btn-gold" onclick="comprar('Saxofón Tenor')">Consultar compra</button></div></div></div></div>
+<div class="modal fade" id="baritono" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h2 class="modal-title fs-5 gold">Saxofón Barítono</h2><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><img class="modal-product-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Baritone_Sax.jpg" alt="Saxofón barítono" onerror="this.onerror=null;this.src='https://commons.wikimedia.org/wiki/Special:FilePath/Saxophone%20alto.jpg'"><p class="mt-3">Instrumento de registro grave que aporta profundidad a las agrupaciones musicales.</p><div class="price">S/ 5,499</div></div><div class="modal-footer"><button class="btn btn-gold" onclick="comprar('Saxofón Barítono')">Consultar compra</button></div></div></div></div>
+<div class="modal fade" id="soprano" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h2 class="modal-title fs-5 gold">Saxofón Soprano</h2><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><img class="modal-product-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Soprano_Saxophone.jpg" alt="Saxofón soprano" onerror="this.onerror=null;this.src='https://commons.wikimedia.org/wiki/Special:FilePath/Saxophone%20alto.jpg'"><p class="mt-3">Compacto y agudo, adecuado para melodías claras y expresivas.</p><div class="price">S/ 2,999</div></div><div class="modal-footer"><button class="btn btn-gold" onclick="comprar('Saxofón Soprano')">Consultar compra</button></div></div></div></div>
+
+<!-- MODALES DE SERVICIOS -->
+<div class="modal fade" id="calidad" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h2 class="modal-title fs-5 gold">Calidad</h2><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body">Consulta las características, accesorios y detalles de cada modelo antes de elegir tu instrumento.</div></div></div></div>
+<div class="modal fade" id="envios" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h2 class="modal-title fs-5 gold">Envíos</h2><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body">Consulta las opciones de entrega, disponibilidad y costos para tu ciudad.</div></div></div></div>
+<div class="modal fade" id="asesoria" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h2 class="modal-title fs-5 gold">Asesoría</h2><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body">Cuéntanos tu experiencia musical y te ayudaremos a comparar las características de los diferentes tipos de saxofón.</div><div class="modal-footer"><a class="btn btn-gold" href="#contacto" data-bs-dismiss="modal">Ir a contacto</a></div></div></div></div>
+<div class="modal fade" id="garantia" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h2 class="modal-title fs-5 gold">Garantía</h2><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body">Consulta el plazo, la cobertura y las condiciones de garantía antes de confirmar una compra.</div></div></div></div>
+
+<!-- MODAL DE COMPRA -->
+<div class="modal fade" id="modalCompra" tabindex="-1"><div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h2 class="modal-title fs-5 gold">Consultar producto</h2><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><p>Has seleccionado:</p><h3 id="productoElegido" class="gold fs-4"></h3><p>Esta página es una demostración y no procesa pagos reales.</p></div><div class="modal-footer"><a class="btn btn-gold" href="#contacto" data-bs-dismiss="modal">Ir a contacto</a></div></div></div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function comprar(producto){
+ document.getElementById("productoElegido").textContent=producto;
+ bootstrap.Modal.getOrCreateInstance(document.getElementById("modalCompra")).show();
+}
+document.getElementById("formulario").addEventListener("submit",function(e){
+ e.preventDefault();
+ document.getElementById("aviso").textContent="¡Gracias! Este formulario es una demostración y todavía no envía mensajes.";
+ this.reset();
+});
+document.querySelectorAll(".navbar .nav-link").forEach(function(link){
+ link.addEventListener("click",function(){
+  const menu=document.getElementById("menu");
+  if(menu.classList.contains("show"))bootstrap.Collapse.getOrCreateInstance(menu).hide();
+ });
+});
+</script>
+</body>
+</html>
